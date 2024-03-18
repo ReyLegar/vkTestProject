@@ -1,0 +1,6 @@
+{
+    "bind_addr": ":8080",
+    "store": {
+        "database_url": "user=user password=password host=localhost port=2022 dbname=mydb sslmode=disable"
+    }
+}

@@ -1,0 +1,423 @@
+basePath: /
+definitions:
+  models.Actor:
+    properties:
+      actorID:
+        type: integer
+      birth_date:
+        type: string
+      gender:
+        type: string
+      name:
+        type: string
+    type: object
+  models.Movie:
+    properties:
+      actors:
+        items:
+          type: integer
+        type: array
+      description:
+        type: string
+      movieId:
+        type: integer
+      rating:
+        type: number
+      release_date:
+        type: string
+      title:
+        type: string
+    type: object
+  models.User:
+    properties:
+      password_hash:
+        type: string
+      role:
+        type: string
+      userID:
+        type: integer
+      username:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: API для работы с приложением vkTestProject
+  title: vkTestProject API
+  version: "1.0"
+paths:
+  /actor/add:
+    post:
+      consumes:
+      - application/json
+      description: Добавляет нового актера в систему.
+      parameters:
+      - description: Информация об актере
+        in: body
+        name: actor
+        required: true
+        schema:
+          $ref: '#/definitions/models.Actor'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: ID нового актера
+          schema:
+            additionalProperties:
+              type: integer
+            type: object
+        "400":
+          description: Некорректные данные запроса
+          schema:
+            type: string
+        "401":
+          description: Требуется авторизация
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Добавление актера
+      tags:
+      - actors
+  /actor/delete:
+    delete:
+      description: Удаляет актера из системы по его идентификатору.
+      parameters:
+      - description: ID актера
+        in: query
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: Актер успешно удален
+        "400":
+          description: Некорректные данные запроса
+          schema:
+            type: string
+        "401":
+          description: Требуется авторизация
+          schema:
+            type: string
+        "404":
+          description: Актер не найден
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Удаление актера
+      tags:
+      - actors
+  /actor/getAll:
+    get:
+      description: Получает список всех актеров и фильмов, в которых они снимались.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список актеров и их фильмов
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/models.Movie'
+              type: array
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Получение всех актеров и фильмов
+      tags:
+      - actors
+  /actor/update:
+    delete:
+      description: Обновляет актера из системы по его идентификатору.
+      parameters:
+      - description: ID актера
+        in: query
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: Актер успешно удален
+        "400":
+          description: Некорректные данные запроса
+          schema:
+            type: string
+        "401":
+          description: Требуется авторизация
+          schema:
+            type: string
+        "404":
+          description: Актер не найден
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Обновление актера
+      tags:
+      - actors
+  /auth/signIn:
+    post:
+      consumes:
+      - application/json
+      description: Аутентифицирует пользователя в системе.
+      parameters:
+      - description: Информация о пользователе
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Токен аутентификации
+          schema:
+            additionalProperties:
+              type: integer
+            type: object
+        "400":
+          description: Некорректные данные запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Аутентификация пользователя
+      tags:
+      - auth
+  /auth/signUp:
+    post:
+      consumes:
+      - application/json
+      description: Регистрирует нового пользователя в системе.
+      parameters:
+      - description: Информация о пользователе
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ID нового пользователя
+          schema:
+            additionalProperties:
+              type: integer
+            type: object
+        "400":
+          description: Некорректные данные запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Регистрация пользователя
+      tags:
+      - auth
+  /movie/add:
+    post:
+      consumes:
+      - application/json
+      description: Добавляет новый фильм в систему.
+      parameters:
+      - description: Информация о фильме
+        in: body
+        name: movie
+        required: true
+        schema:
+          $ref: '#/definitions/models.Movie'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Фильм успешно добавлен
+        "400":
+          description: Некорректные данные запроса
+          schema:
+            type: string
+        "401":
+          description: Требуется авторизация
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Добавление фильма
+      tags:
+      - movies
+  /movie/delete:
+    delete:
+      description: Удаляет фильм из системы.
+      parameters:
+      - description: ID фильма
+        in: query
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Фильм успешно удален
+        "400":
+          description: Некорректные данные запроса
+          schema:
+            type: string
+        "401":
+          description: Требуется авторизация
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Удаление фильма
+      tags:
+      - movies
+  /movie/getAll:
+    get:
+      description: Получает список всех фильмов в системе.
+      parameters:
+      - description: Сортировка по алфавиту (asc/desc)
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список фильмов
+          schema:
+            items:
+              $ref: '#/definitions/models.Movie'
+            type: array
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Получение всех фильмов
+      tags:
+      - movies
+  /movie/update:
+    put:
+      consumes:
+      - application/json
+      description: Обновляет информацию о существующем фильме в системе.
+      parameters:
+      - description: ID фильма
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: Информация о фильме
+        in: body
+        name: movie
+        required: true
+        schema:
+          $ref: '#/definitions/models.Movie'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Фильм успешно обновлен
+        "400":
+          description: Некорректные данные запроса
+          schema:
+            type: string
+        "401":
+          description: Требуется авторизация
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Обновление фильма
+      tags:
+      - movies
+  /movies/searchByActorName:
+    get:
+      description: Выполняет поиск фильмов по имени актера, участвующего в них.
+      parameters:
+      - description: Имя актера
+        in: query
+        name: actorName
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список найденных фильмов
+          schema:
+            items:
+              $ref: '#/definitions/models.Movie'
+            type: array
+        "400":
+          description: Некорректные данные запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Поиск фильмов по имени актера
+      tags:
+      - movies
+  /movies/searchByTitle:
+    get:
+      description: Выполняет поиск фильмов по их названию.
+      parameters:
+      - description: Название фильма
+        in: query
+        name: title
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список найденных фильмов
+          schema:
+            items:
+              $ref: '#/definitions/models.Movie'
+            type: array
+        "400":
+          description: Некорректные данные запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Поиск фильмов по названию
+      tags:
+      - movies
+swagger: "2.0"
